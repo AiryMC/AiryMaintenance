@@ -1,0 +1,14 @@
+# Whether the server is in maintenance mode.
+# If set to true, players will be kicked upon joining.
+maintenance: false
+
+# The message shown to players who try to join during maintenance.
+# Supports MiniMessage formatting (e.g., <color:#hexcode>).
+kick-message: "<color:#ff6969>Server is currently down for maintenance</color>"
+
+# The message shown in the server list
+# Note: Formatting like MiniMessage or color codes is not supported.
+ping-message: "Under Maintenance"
+
+fallback-servers:
+  - lobby

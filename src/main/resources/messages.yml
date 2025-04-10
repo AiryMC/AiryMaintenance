@@ -1,0 +1,22 @@
+# Global placeholders
+# {prefix} | The prefix from this config
+
+prefix: "<b><color:#4daeff>MAINTENANCE</color></b> <dark_gray>»"
+
+reload-message: "{prefix} <color:#64ff61>Reloaded config and messages in <gray>{time}</gray>!</color>"
+
+# Status color placeholders
+# {status} | Either "Active" or "Inactive"
+active: "<color:#64ff61>Active</color>"
+inactive: "<color:#ff6969>Inactive</color>"
+
+# Placeholders
+# {status} | Will be either one of the "active" or "inactive" specified above
+maintenance-status: "{prefix} <gray>Maintenance:</gray> {status}"
+maintenance-enabled: "{prefix} <color:#64ff61>Maintenance enabled!</color>"
+maintenance-disabled: "{prefix} <color:#ff6969>Maintenance disabled!</color>"
+
+maintenance-add-success: "{prefix} <color:#64ff61>Added <gray>{player}</gray> to the whitelist!</color>"
+maintenance-add-failure: "{prefix} <color:#ff6969>Failed to add <gray>{player}</gray> to the whitelist.</color>"
+maintenance-remove-success: "{prefix} <color:#64ff61>Removed <gray>{player}</gray> from the whitelist!</color>"
+maintenance-remove-failure: "{prefix} <color:#ff6969>Failed to remove <gray>{player}</gray> from the whitelist.</color>"
