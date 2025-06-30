@@ -17,8 +17,8 @@ public final class Maintenance {
 
     private boolean enabled = false;
     private List<UUID> globalWhitelist = new ArrayList<>();
-    private Map<RegisteredServer, Set<UUID>> whitelist = new HashMap<>();
-    private Map<RegisteredServer, Boolean> lockedServers = new HashMap<>();
+    private final Map<RegisteredServer, Set<UUID>> whitelist = new HashMap<>();
+    private final Map<RegisteredServer, Boolean> lockedServers = new HashMap<>();
 
     public boolean addToWhitelist(String playerName, RegisteredServer server) {
         return modifyWhitelist(playerName, Action.ADD, server);

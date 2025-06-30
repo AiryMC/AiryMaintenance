@@ -33,7 +33,7 @@ public class PlayerConnectListener extends EventListener<AiryMaintenance> {
             return;
 
         targetServer.sendMessage(Component.text("Some one joined!"));
-        getPlugin().getLogger().info("Target Server: " + targetServer.toString());
+        getPlugin().getLogger().info("Target Server: " + targetServer);
 
         if (maintenance.isEnabled(targetServer) && !maintenance.isWhitelisted(player, targetServer)) {
             RegisteredServer fallback = getFallbackServer(player);

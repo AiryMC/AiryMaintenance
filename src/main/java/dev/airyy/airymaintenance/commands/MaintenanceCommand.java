@@ -14,7 +14,6 @@ import dev.airyy.airymaintenance.config.MainConfig;
 import dev.airyy.airymaintenance.config.MessageConfig;
 import dev.airyy.airymaintenance.config.WhitelistConfig;
 import dev.airyy.airymaintenance.maintenance.Maintenance;
-import net.kyori.adventure.text.Component;
 
 import java.util.Collection;
 import java.util.Optional;
