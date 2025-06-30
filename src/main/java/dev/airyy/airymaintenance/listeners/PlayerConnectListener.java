@@ -24,8 +24,8 @@ public class PlayerConnectListener extends EventListener<AiryMaintenance> {
         RegisteredServer targetServer = event.getResult().getServer().orElse(null);
 
         // Global maintenance check
-        if (maintenance.isEnabled() && !maintenance.isWhitelisted(player)) {
-            maintenance.kickPlayer(player, true);
+        if (maintenance.isEnabled(null) && !maintenance.isWhitelisted(player)) {
+            maintenance.kickPlayer(player, null);
             return;
         }
 

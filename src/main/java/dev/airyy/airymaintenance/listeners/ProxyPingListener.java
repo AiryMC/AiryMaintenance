@@ -21,7 +21,7 @@ public class ProxyPingListener extends EventListener<AiryMaintenance> {
 
     @Subscribe
     public void onPing(ProxyPingEvent event) {
-        if (!maintenance.isEnabled())
+        if (!maintenance.isEnabled(null))
             return;
 
         event.setPing(ServerPing

@@ -42,7 +42,8 @@ public class MainConfig extends Config {
         if (getDocument() == null)
             return;
 
-        maintenance.setEnabled(getDocument().getBoolean(Route.from("maintenance")));
+        // TODO: Make this support non global status
+        maintenance.setEnabled(getDocument().getBoolean(Route.from("maintenance")), null);
         kickMessage = miniMessage.deserialize(getDocument().getString(Route.from("kick-message")));
         pingMessage = miniMessage.deserialize(getDocument().getString(Route.from("ping-message")));
 
@@ -64,7 +65,7 @@ public class MainConfig extends Config {
         if (getDocument() == null)
             return;
 
-        getDocument().set(Route.from("maintenance"), maintenance.isEnabled());
+        getDocument().set(Route.from("maintenance"), maintenance.isEnabled(null));
         getDocument().set(Route.from("kick-message"), miniMessage.serialize(kickMessage));
         getDocument().set(Route.from("ping-message"), miniMessage.serialize(pingMessage));
 

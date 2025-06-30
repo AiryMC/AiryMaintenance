@@ -20,10 +20,6 @@ public final class Maintenance {
     private Map<RegisteredServer, Set<UUID>> whitelist = new HashMap<>();
     private Map<RegisteredServer, Boolean> lockedServers = new HashMap<>();
 
-    public boolean addToWhitelist(String playerName) {
-        return modifyWhitelist(playerName, Action.ADD, null);
-    }
-
     public boolean addToWhitelist(String playerName, RegisteredServer server) {
         return modifyWhitelist(playerName, Action.ADD, server);
     }
@@ -73,13 +69,15 @@ public final class Maintenance {
         }
     }
 
-    public boolean kickPlayer(Player player, boolean isGlobal) {
+    public boolean kickPlayer(Player player, @Nullable RegisteredServer server) {
+        boolean global = (server == null);
+
         // Ensure config is not null
         if (config == null) {
             config = plugin.getMainConfig();
         }
 
-        if (isGlobal && isEnabled() && !isWhitelisted(player)) {
+        if (global && isEnabled(server) && !isWhitelisted(player, server)) {
             player.disconnect(config.getKickMessage());
             return true;
         }
@@ -137,19 +135,18 @@ public final class Maintenance {
         WhitelistConfig.getInstance().save();
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void setEnabled(RegisteredServer server, boolean enabled) {
+    public void setEnabled(boolean enabled, @Nullable RegisteredServer server) {
+        if (server == null) {
+            this.enabled = enabled;
+            return;
+        }
         this.lockedServers.put(server, enabled);
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
     public boolean isEnabled(RegisteredServer server) {
+        if (server == null)
+            return this.enabled;
+
         // If maintenance is enabled it returns true otherwise false
         return lockedServers.getOrDefault(server, false);
     }

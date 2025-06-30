@@ -15,17 +15,12 @@ import dev.airyy.airymaintenance.config.WhitelistConfig;
 import dev.airyy.airymaintenance.listeners.PlayerConnectListener;
 import dev.airyy.airymaintenance.listeners.ProxyPingListener;
 import dev.airyy.airymaintenance.maintenance.Maintenance;
-import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.velocity.LiteVelocityFactory;
-import dev.rollczi.litecommands.velocity.LiteVelocityMessages;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
 @Plugin(id = "airymaintenance", name = "AiryMaintenance", version = BuildConstants.VERSION, authors = {"AiryyCodes"})
 public class AiryMaintenance extends AiryPlugin {
-
-    private final LiteCommands<CommandSource> commandManager;
 
     private final Maintenance maintenance;
     private final MainConfig mainConfig;
@@ -41,14 +36,6 @@ public class AiryMaintenance extends AiryPlugin {
         mainConfig = new MainConfig();
         messageConfig = new MessageConfig();
         whitelistConfig = new WhitelistConfig();
-
-        commandManager = LiteVelocityFactory.builder(getServer())
-                .commands(
-                        new MaintenanceCommand()
-                )
-                .argument(RegisteredServer.class, new RegisteredServerArgument())
-                .message(LiteVelocityMessages.PLAYER_NOT_FOUND, (player) -> "&cPlayer &7" + player + " &cnot found.")
-                .build();
     }
 
     @Override
@@ -56,6 +43,9 @@ public class AiryMaintenance extends AiryPlugin {
         mainConfig.load();
         messageConfig.load();
         whitelistConfig.load();
+
+        getCommandManager().registerArgumentParser(RegisteredServer.class, new RegisteredServerArgument());
+        getCommandManager().register(new MaintenanceCommand());
 
         getServer().getEventManager().register(this, new ProxyPingListener(this));
         getServer().getEventManager().register(this, new PlayerConnectListener(this));
@@ -71,10 +61,6 @@ public class AiryMaintenance extends AiryPlugin {
         mainConfig.save();
         messageConfig.save();
         whitelistConfig.save();
-
-        if (commandManager != null) {
-            commandManager.unregister();
-        }
     }
 
     public Maintenance getMaintenance() {
