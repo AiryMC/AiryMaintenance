@@ -5,8 +5,10 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.airyy.AiryLib.velocity.AiryPlugin;
 import dev.airyy.airymaintenance.commands.MaintenanceCommand;
+import dev.airyy.airymaintenance.commands.arguments.RegisteredServerArgument;
 import dev.airyy.airymaintenance.config.MainConfig;
 import dev.airyy.airymaintenance.config.MessageConfig;
 import dev.airyy.airymaintenance.config.WhitelistConfig;
@@ -44,6 +46,7 @@ public class AiryMaintenance extends AiryPlugin {
                 .commands(
                         new MaintenanceCommand()
                 )
+                .argument(RegisteredServer.class, new RegisteredServerArgument())
                 .message(LiteVelocityMessages.PLAYER_NOT_FOUND, (player) -> "&cPlayer &7" + player + " &cnot found.")
                 .build();
     }

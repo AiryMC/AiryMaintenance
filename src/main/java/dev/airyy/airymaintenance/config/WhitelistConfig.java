@@ -31,7 +31,7 @@ public class WhitelistConfig extends Config {
         List<String> uuids = getDocument().getStringList(Route.from("whitelist"));
         List<UUID> whitelist = uuids.stream().map(UUID::fromString).toList();
         List<UUID> newWhitelist = new ArrayList<>(whitelist);
-        maintenance.setWhitelist(newWhitelist);
+        maintenance.setGlobalWhitelist(newWhitelist);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class WhitelistConfig extends Config {
         if (getDocument() == null)
             return;
 
-        List<String> uuids = maintenance.getWhitelist().stream().map(UUID::toString).toList();
+        List<String> uuids = maintenance.getGlobalWhitelist().stream().map(UUID::toString).toList();
         plugin.getLogger().info("Whitelisted Players: {}", uuids.size());
 
         getDocument().set(Route.from("whitelist"), uuids);
