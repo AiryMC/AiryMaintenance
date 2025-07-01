@@ -62,7 +62,10 @@ public class MaintenanceCommand {
                 break;
         }
 
-        source.sendMessage(messages.getMaintenanceEnabled());
+        if (server == null)
+            source.sendMessage(messages.getMaintenanceEnabled());
+        else
+            source.sendMessage(messages.getMaintenanceEnabledServer(server));
     }
 
     @Handler("off")
@@ -74,7 +77,10 @@ public class MaintenanceCommand {
 
         config.save();
 
-        source.sendMessage(messages.getMaintenanceDisabled());
+        if (server == null)
+            source.sendMessage(messages.getMaintenanceDisabled());
+        else
+            source.sendMessage(messages.getMaintenanceDisabledServer(server));
     }
 
     @Handler("add")
@@ -82,11 +88,17 @@ public class MaintenanceCommand {
         boolean status = maintenance.addToWhitelist(target, server);
 
         if (!status) {
-            source.sendMessage(messages.getMaintenanceAddFailure(target));
+            if (server == null)
+                source.sendMessage(messages.getMaintenanceAddFailure(target));
+            else
+                source.sendMessage(messages.getMaintenanceAddFailureServer(target, server));
             return;
         }
 
-        source.sendMessage(messages.getMaintenanceAddSuccess(target));
+        if (server == null)
+            source.sendMessage(messages.getMaintenanceAddSuccess(target));
+        else
+            source.sendMessage(messages.getMaintenanceAddSuccessServer(target, server));
     }
 
     @Handler("remove")
@@ -94,7 +106,10 @@ public class MaintenanceCommand {
         boolean status = maintenance.removeFromWhitelist(target, server);
 
         if (!status) {
-            source.sendMessage(messages.getMaintenanceRemoveFailure(target));
+            if (server == null)
+                source.sendMessage(messages.getMaintenanceRemoveFailure(target));
+            else
+                source.sendMessage(messages.getMaintenanceRemoveFailureServer(target, server));
             return;
         }
 
@@ -110,6 +125,9 @@ public class MaintenanceCommand {
             }
         }
 
-        source.sendMessage(messages.getMaintenanceRemoveSuccess(target));
+        if (server == null)
+            source.sendMessage(messages.getMaintenanceRemoveSuccess(target));
+        else
+            source.sendMessage(messages.getMaintenanceRemoveSuccessServer(target, server));
     }
 }

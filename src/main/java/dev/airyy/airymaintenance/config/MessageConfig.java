@@ -1,5 +1,6 @@
 package dev.airyy.airymaintenance.config;
 
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.airyy.AiryLib.core.utils.Messages;
 import dev.airyy.airymaintenance.AiryMaintenance;
 import dev.dejvokep.boostedyaml.route.Route;
@@ -18,12 +19,19 @@ public class MessageConfig extends Config {
     private Component active;
     private Component inactive;
     private Component maintenanceStatus;
+    private Component maintenanceStatusServer;
     private Component maintenanceEnabled;
+    private Component maintenanceEnabledServer;
     private Component maintenanceDisabled;
+    private Component maintenanceDisabledServer;
     private Component maintenanceAddSuccess;
+    private Component maintenanceAddSuccessServer;
     private Component maintenanceAddFailure;
+    private Component maintenanceAddFailureServer;
     private Component maintenanceRemoveSuccess;
+    private Component maintenanceRemoveSuccessServer;
     private Component maintenanceRemoveFailure;
+    private Component maintenanceRemoveFailureServer;
 
     public MessageConfig() {
         super("messages.yml");
@@ -41,12 +49,19 @@ public class MessageConfig extends Config {
         active = miniMessage.deserialize(getDocument().getString(Route.from("active")));
         inactive = miniMessage.deserialize(getDocument().getString(Route.from("inactive")));
         maintenanceStatus = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-status")));
+        maintenanceStatusServer = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-status-server")));
         maintenanceEnabled = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-enabled")));
+        maintenanceEnabledServer = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-enabled-server")));
         maintenanceDisabled = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-disabled")));
+        maintenanceDisabledServer = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-disabled-server")));
         maintenanceAddSuccess = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-add-success")));
+        maintenanceAddSuccessServer = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-add-success-server")));
         maintenanceAddFailure = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-add-failure")));
+        maintenanceAddFailureServer = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-add-failure-server")));
         maintenanceRemoveSuccess = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-remove-success")));
+        maintenanceRemoveSuccessServer = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-remove-success-server")));
         maintenanceRemoveFailure = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-remove-failure")));
+        maintenanceRemoveFailureServer = miniMessage.deserialize(getDocument().getString(Route.from("maintenance-remove-failure-server")));
     }
 
     @Override
@@ -59,12 +74,19 @@ public class MessageConfig extends Config {
         getDocument().set(Route.from("active"), miniMessage.serialize(active));
         getDocument().set(Route.from("inactive"), miniMessage.serialize(inactive));
         getDocument().set(Route.from("maintenance-status"), miniMessage.serialize(maintenanceStatus));
+        getDocument().set(Route.from("maintenance-status-server"), miniMessage.serialize(maintenanceStatusServer));
         getDocument().set(Route.from("maintenance-enabled"), miniMessage.serialize(maintenanceEnabled));
+        getDocument().set(Route.from("maintenance-enabled-server"), miniMessage.serialize(maintenanceEnabledServer));
         getDocument().set(Route.from("maintenance-disabled"), miniMessage.serialize(maintenanceDisabled));
+        getDocument().set(Route.from("maintenance-disabled-server"), miniMessage.serialize(maintenanceDisabledServer));
         getDocument().set(Route.from("maintenance-add-success"), miniMessage.serialize(maintenanceAddSuccess));
+        getDocument().set(Route.from("maintenance-add-success-server"), miniMessage.serialize(maintenanceAddSuccessServer));
         getDocument().set(Route.from("maintenance-add-failure"), miniMessage.serialize(maintenanceAddFailure));
+        getDocument().set(Route.from("maintenance-add-failure-server"), miniMessage.serialize(maintenanceAddFailureServer));
         getDocument().set(Route.from("maintenance-remove-success"), miniMessage.serialize(maintenanceRemoveSuccess));
+        getDocument().set(Route.from("maintenance-remove-success-server"), miniMessage.serialize(maintenanceRemoveSuccessServer));
         getDocument().set(Route.from("maintenance-remove-failure"), miniMessage.serialize(maintenanceRemoveFailure));
+        getDocument().set(Route.from("maintenance-remove-failure-server"), miniMessage.serialize(maintenanceRemoveFailureServer));
     }
 
     public static MessageConfig getInstance() {
@@ -97,6 +119,14 @@ public class MessageConfig extends Config {
         );
     }
 
+    public Component getMaintenanceStatusServer(boolean status, RegisteredServer server) {
+        return Messages.replaceAll(maintenanceStatusServer,
+                "{prefix}", Messages.serialize(prefix),
+                "{status}", Messages.serialize(status ? getActive() : getInactive()),
+                "{server}", server.getServerInfo().getName()
+        );
+    }
+
     public Component getActive() {
         return Messages.replaceAll(active);
     }
@@ -111,9 +141,23 @@ public class MessageConfig extends Config {
         );
     }
 
+    public Component getMaintenanceEnabledServer(RegisteredServer server) {
+        return Messages.replaceAll(maintenanceEnabledServer,
+                "{prefix}", Messages.serialize(getPrefix()),
+                "{server}", server.getServerInfo().getName()
+        );
+    }
+
     public Component getMaintenanceDisabled() {
         return Messages.replaceAll(maintenanceDisabled,
                 "{prefix}", Messages.serialize(getPrefix())
+        );
+    }
+
+    public Component getMaintenanceDisabledServer(RegisteredServer server) {
+        return Messages.replaceAll(maintenanceDisabledServer,
+                "{prefix}", Messages.serialize(getPrefix()),
+                "{server}", server.getServerInfo().getName()
         );
     }
 
@@ -124,10 +168,26 @@ public class MessageConfig extends Config {
         );
     }
 
+    public Component getMaintenanceAddSuccessServer(String player, RegisteredServer server) {
+        return Messages.replaceAll(maintenanceAddSuccessServer,
+                "{prefix}", Messages.serialize(getPrefix()),
+                "{player}", player,
+                "{server}", server.getServerInfo().getName()
+        );
+    }
+
     public Component getMaintenanceAddFailure(String player) {
         return Messages.replaceAll(maintenanceAddFailure,
                 "{prefix}", Messages.serialize(getPrefix()),
                 "{player}", player
+        );
+    }
+
+    public Component getMaintenanceAddFailureServer(String player, RegisteredServer server) {
+        return Messages.replaceAll(maintenanceAddFailureServer,
+                "{prefix}", Messages.serialize(getPrefix()),
+                "{player}", player,
+                "{server}", server.getServerInfo().getName()
         );
     }
 
@@ -138,10 +198,26 @@ public class MessageConfig extends Config {
         );
     }
 
+    public Component getMaintenanceRemoveSuccessServer(String player, RegisteredServer server) {
+        return Messages.replaceAll(maintenanceRemoveSuccessServer,
+                "{prefix}", Messages.serialize(getPrefix()),
+                "{player}", player,
+                "{server}", server.getServerInfo().getName()
+        );
+    }
+
     public Component getMaintenanceRemoveFailure(String player) {
         return Messages.replaceAll(maintenanceRemoveFailure,
                 "{prefix}", Messages.serialize(getPrefix()),
                 "{player}", player
+        );
+    }
+
+    public Component getMaintenanceRemoveFailureServer(String player, RegisteredServer server) {
+        return Messages.replaceAll(maintenanceRemoveFailureServer,
+                "{prefix}", Messages.serialize(getPrefix()),
+                "{player}", player,
+                "{server}", server.getServerInfo().getName()
         );
     }
 }
