@@ -4,6 +4,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import dev.airyy.airymaintenance.AiryMaintenance;
 import dev.airyy.airymaintenance.maintenance.Maintenance;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.dvs.versioning.AutomaticVersioning;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.dvs.versioning.ManualVersioning;
@@ -14,9 +15,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainConfig extends Config {
 
@@ -42,8 +42,29 @@ public class MainConfig extends Config {
         if (getDocument() == null)
             return;
 
-        // TODO: Make this support non global status
         maintenance.setEnabled(getDocument().getBoolean(Route.from("maintenance")), null);
+
+        // Load the whitelist of individual servers
+        Section serversSection = getDocument().getSection("locked-servers");
+        Map<String, Boolean> loadedLockedServers = new HashMap<>();
+
+        if (serversSection != null) {
+            for (Object keyObj : serversSection.getKeys()) {
+                if (!(keyObj instanceof String key)) continue;
+
+                boolean locked = serversSection.getBoolean(key);
+                loadedLockedServers.put(key, locked);
+            }
+        }
+
+        for (Map.Entry<String, Boolean> entry : loadedLockedServers.entrySet()) {
+            Optional<RegisteredServer> optionalServer = plugin.getServer().getServer(entry.getKey());
+            if (optionalServer.isEmpty())
+                continue;
+
+            maintenance.setEnabled(entry.getValue(), optionalServer.get());
+        }
+
         kickMessage = miniMessage.deserialize(getDocument().getString(Route.from("kick-message")));
         pingMessage = miniMessage.deserialize(getDocument().getString(Route.from("ping-message")));
 
@@ -66,6 +87,14 @@ public class MainConfig extends Config {
             return;
 
         getDocument().set(Route.from("maintenance"), maintenance.isEnabled(null));
+
+        Map<String, Boolean> lockedServers = maintenance.getLockedServers().entrySet().stream().collect(Collectors.toMap(
+                entry -> entry.getKey().getServerInfo().getName(),
+                Map.Entry::getValue
+        ));
+
+        getDocument().set(Route.from("locked-servers"), lockedServers);
+
         getDocument().set(Route.from("kick-message"), miniMessage.serialize(kickMessage));
         getDocument().set(Route.from("ping-message"), miniMessage.serialize(pingMessage));
 

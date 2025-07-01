@@ -10,5 +10,9 @@ kick-message: "<color:#ff6969>Server is currently down for maintenance</color>"
 # Note: Formatting like MiniMessage or color codes is not supported.
 ping-message: "Under Maintenance"
 
+# Which server the player will get kicked to when another one goes in maintenance mode.
+# It picks on of the servers randomly
 fallback-servers:
   - lobby
+
+locked-servers:

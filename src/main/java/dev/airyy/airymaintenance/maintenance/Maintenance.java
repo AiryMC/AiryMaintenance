@@ -17,8 +17,8 @@ public final class Maintenance {
 
     private boolean enabled = false;
     private List<UUID> globalWhitelist = new ArrayList<>();
-    private final Map<RegisteredServer, Set<UUID>> whitelist = new HashMap<>();
-    private final Map<RegisteredServer, Boolean> lockedServers = new HashMap<>();
+    private Map<RegisteredServer, Set<UUID>> whitelist = new HashMap<>();
+    private Map<RegisteredServer, Boolean> lockedServers = new HashMap<>();
 
     public boolean addToWhitelist(String playerName, RegisteredServer server) {
         return modifyWhitelist(playerName, Action.ADD, server);
@@ -47,11 +47,8 @@ public final class Maintenance {
 
                 if (action == Action.ADD && !newWhitelist.contains(uuid)) {
                     whitelist.put(server, newWhitelist);
-                    plugin.getLogger().info("Whitelisted Players: {}", whitelist.get(server).size());
 
                     whitelist.computeIfAbsent(server, s -> new LinkedHashSet<>()).add(uuid);
-
-                    plugin.getLogger().info("Whitelisted Players: {}", whitelist.get(server).size());
 
                 } else if (action == Action.REMOVE && whitelist.containsKey(server) && newWhitelist.contains(uuid)) {
                     whitelist.get(server).remove(uuid);
@@ -131,6 +128,14 @@ public final class Maintenance {
         this.globalWhitelist = globalWhitelist;
     }
 
+    public Map<RegisteredServer, Set<UUID>> getWhitelist() {
+        return whitelist;
+    }
+
+    public void setWhitelist(Map<RegisteredServer, Set<UUID>> whitelist) {
+        this.whitelist = whitelist;
+    }
+
     public void save() {
         WhitelistConfig.getInstance().save();
     }
@@ -149,6 +154,10 @@ public final class Maintenance {
 
         // If maintenance is enabled it returns true otherwise false
         return lockedServers.getOrDefault(server, false);
+    }
+
+    public Map<RegisteredServer, Boolean> getLockedServers() {
+        return lockedServers;
     }
 
     private enum Action {
