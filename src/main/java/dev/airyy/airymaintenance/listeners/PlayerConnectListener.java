@@ -32,9 +32,6 @@ public class PlayerConnectListener extends EventListener<AiryMaintenance> {
         if (targetServer == null)
             return;
 
-        targetServer.sendMessage(Component.text("Some one joined!"));
-        getPlugin().getLogger().info("Target Server: " + targetServer);
-
         if (maintenance.isEnabled(targetServer) && !maintenance.isWhitelisted(player, targetServer)) {
             RegisteredServer fallback = getFallbackServer(player);
             if (fallback == null) {
@@ -49,32 +46,14 @@ public class PlayerConnectListener extends EventListener<AiryMaintenance> {
 
     private RegisteredServer getFallbackServer(Player player) {
         for (RegisteredServer fallbackServer : config.getFallbackServers()) {
-            getPlugin().getLogger().info("Fallback Server: {}", fallbackServer.getServerInfo().getName());
-            getPlugin()
-                    .getLogger()
-                    .info(
-                            "Enabled: {}",
-                            maintenance.isEnabled(
-                                    fallbackServer));
-            getPlugin()
-                    .getLogger()
-                    .info("Whitelisted: {}", maintenance.isWhitelisted(player, fallbackServer));
-
-            // If maintenance is NOT enabled on the server, attempt to connect to the
-            // fallback server
+            // If maintenance is NOT enabled on the server, attempt to connect to the fallback server
             if (!maintenance.isEnabled(fallbackServer)) {
-                getPlugin()
-                        .getLogger()
-                        .info(
-                                "Connecting player to fallback server {}...",
-                                fallbackServer.getServerInfo().getName());
-
                 return fallbackServer;
             }
 
             // If maintenance is enabled, skip this fallback server
             if (!maintenance.isWhitelisted(player, fallbackServer)) {
-                continue; // Continue to the next fallback server if the player is not whitelisted
+                continue;
             }
 
             return fallbackServer;
